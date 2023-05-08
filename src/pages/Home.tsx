@@ -1,10 +1,15 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 
 import Categories from "../components/categories/Categories";
 import Sort from "../components/sort/Sort";
 import Skeleton from "../components/pizzaBlock/Skeleton";
 import PizzaBlock from "../components/pizzaBlock/PizzaBlock";
 import Pagination from "../components/pagination/Pagination";
+import {ContextType, SearchContext} from "../App";
+import useSelector from '@reduxjs/toolkit'
+import {useAppSelector} from "../redux/store";
+import axios from "axios";
+
 
 type pizzaType = {
     id: number;
@@ -23,24 +28,35 @@ export type SortType = {
 type HomePropsType = {
     searchValue: string
 }
-const Home: FC<HomePropsType> = ({searchValue}) => {
+const Home: FC<HomePropsType> = () => {
+    const {searchValue} = useContext<ContextType>(SearchContext);
+
     const [items, setItems] = useState<pizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
-    const [categoryId, setCategoryId] = useState(0)
-    const [sortType, setSortType] = useState({name: 'популярности', sortProperty: 'rating'})
     const [currentPage, setCurrentPage] = useState(1)
+    //const currentPage=UseAppSelector(state => state.)
+    const categoryId = useAppSelector(state => state.filter.categoryId)
+    const sortType = useAppSelector(state => state.filter.sort.sortProperty)
 
-    const category = categoryId ? `category=${categoryId}` : ''
+    console.log('app render')
+
+
+    const category = categoryId ? `&category=${categoryId}` : ''
     const search = searchValue ? `&search=${searchValue}` : ''
-    const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc'
-    const sortBy = sortType.sortProperty.replace('-', '')
+    const order = sortType.includes('-') ? 'asc' : 'desc'
+    const sortBy = sortType.replace('-', '')
 
     useEffect(() => {
         setIsLoading(true)
-        fetch(`https://64553d0af803f345763e2c11.mockapi.io/items?page=${currentPage}&limit=4&sortBy=${sortBy}${category}&order=${order}${search}`)
-            .then(res => res.json())
+        // fetch(`https://64553d0af803f345763e2c11.mockapi.io/items?page=${currentPage}&sortBy=${sortBy}${category}&order=${order}${search}`)
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         setItems(res)
+        //         setIsLoading(false)
+        //     })
+        axios.get(`https://64553d0af803f345763e2c11.mockapi.io/items?page=${currentPage}&sortBy=${sortBy}${category}&order=${order}${search}`)
             .then(res => {
-                setItems(res)
+                setItems(res.data)
                 setIsLoading(false)
             })
         window.scrollTo(0, 0)
@@ -61,8 +77,8 @@ const Home: FC<HomePropsType> = ({searchValue}) => {
     return (
         <div className="container">
             <div className="content__top">
-                <Categories value={categoryId} changeCategory={(id) => setCategoryId(id)}/>
-                <Sort value={sortType} changeSort={(id) => setSortType(id)}/>
+                <Categories/>
+                <Sort/>
             </div>
 
             <h2 className="content__title">Все пиццы({pizzas.length})</h2>

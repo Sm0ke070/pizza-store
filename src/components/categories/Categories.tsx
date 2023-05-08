@@ -1,12 +1,15 @@
 import {FC} from "react";
+import {setCategoryId} from "../../redux/slices/filterSlice";
+import {useAppDispatch, useAppSelector} from "../../redux/store";
 
-type CategoriesPropsType = {
-    value: number
-    changeCategory: (value: number) => void
-}
-const Categories: FC<CategoriesPropsType> = ({value, changeCategory}) => {
+
+const Categories: FC = () => {
+
+    const dispatch = useAppDispatch()
+    const categoryId = useAppSelector(state => state.filter.categoryId)
+
     const changeActiveIndex = (index: number) => {
-        changeCategory(index)
+        dispatch(setCategoryId(index))
     }
     const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые',]
 
@@ -14,7 +17,7 @@ const Categories: FC<CategoriesPropsType> = ({value, changeCategory}) => {
         <div className="categories">
             <ul>
                 {categories.map((categoryName, index) => <li key={index} onClick={() => changeActiveIndex(index)}
-                                                             className={value === index ? 'active' : ''}>{categoryName}</li>)}
+                                                             className={categoryId === index ? 'active' : ''}>{categoryName}</li>)}
             </ul>
         </div>
     )

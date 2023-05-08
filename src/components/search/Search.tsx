@@ -1,24 +1,32 @@
-import React, {FC} from 'react';
+import React, {FC, useContext, useRef} from 'react';
 import styles from './search.module.scss'
 import searchIcon from '../../assets/img/serach-input.svg'
 import closeIcon from '../../assets/img/clear-input.svg'
+import {ContextType, SearchContext} from "../../App";
 
-type SearchPropsType = {
-    searchValue: string
-    setSearchValue: (value: string) => void
-}
-const Search: FC<SearchPropsType> = ({searchValue, setSearchValue}) => {
+
+const Search: FC = () => {
+
+    const inputRef = useRef<HTMLInputElement>(null);
+    const {searchValue, setSearchValue} = useContext<ContextType>(SearchContext)
+
+    const onClickClear = () => {
+        setSearchValue('')
+        if (inputRef.current) {
+            inputRef.current.focus()
+        }
+    }
 
     return (
         <div className={styles.root}>
             <img className={styles.searchIcon} src={searchIcon} alt="search-icon"/>
-            <input value={searchValue} onChange={(event) => setSearchValue(event.currentTarget.value)}
+            <input ref={inputRef} value={searchValue}
+                   onChange={(event) => setSearchValue(event.currentTarget.value)}
                    className={styles.input} type="text"
                    placeholder={'Поиск'}/>
             {searchValue &&
-                <img onClick={() => setSearchValue('')} className={styles.clearIcon} src={closeIcon}
+                <img onClick={onClickClear} className={styles.clearIcon} src={closeIcon}
                      alt="clear-input"/>
-                // <button onClick={() => setSearchValue('')}>X</button>
             }
         </div>
 
