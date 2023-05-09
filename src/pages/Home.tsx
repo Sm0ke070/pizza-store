@@ -7,8 +7,9 @@ import PizzaBlock from "../components/pizzaBlock/PizzaBlock";
 import Pagination from "../components/pagination/Pagination";
 import {ContextType, SearchContext} from "../App";
 import useSelector from '@reduxjs/toolkit'
-import {useAppSelector} from "../redux/store";
+import {useAppDispatch, useAppSelector} from "../redux/store";
 import axios from "axios";
+import {setPageCount} from "../redux/slices/filterSlice";
 
 
 type pizzaType = {
@@ -30,16 +31,13 @@ type HomePropsType = {
 }
 const Home: FC<HomePropsType> = () => {
     const {searchValue} = useContext<ContextType>(SearchContext);
-
+    const dispatch = useAppDispatch()
     const [items, setItems] = useState<pizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
-    const [currentPage, setCurrentPage] = useState(1)
     //const currentPage=UseAppSelector(state => state.)
     const categoryId = useAppSelector(state => state.filter.categoryId)
     const sortType = useAppSelector(state => state.filter.sort.sortProperty)
-
-    console.log('app render')
-
+    const currentPage = useAppSelector(state => state.filter.currentPage)
 
     const category = categoryId ? `&category=${categoryId}` : ''
     const search = searchValue ? `&search=${searchValue}` : ''
@@ -48,13 +46,11 @@ const Home: FC<HomePropsType> = () => {
 
     useEffect(() => {
         setIsLoading(true)
-        // fetch(`https://64553d0af803f345763e2c11.mockapi.io/items?page=${currentPage}&sortBy=${sortBy}${category}&order=${order}${search}`)
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         setItems(res)
-        //         setIsLoading(false)
-        //     })
-        axios.get(`https://64553d0af803f345763e2c11.mockapi.io/items?page=${currentPage}&sortBy=${sortBy}${category}&order=${order}${search}`)
+        axios.get(`https://64553d0af803f345763e2c11.mockapi.io/items`)
+            .then((res) => {
+                dispatch(setPageCount(Math.ceil(res.data.length / 4)))
+            })
+        axios.get(`https://64553d0af803f345763e2c11.mockapi.io/items?limit=4&page=${currentPage}&sortBy=${sortBy}${category}&order=${order}${search}`)
             .then(res => {
                 setItems(res.data)
                 setIsLoading(false)
@@ -88,7 +84,7 @@ const Home: FC<HomePropsType> = () => {
                 {/*{skeletons}*/}
 
             </div>
-            <Pagination changePage={(page) => setCurrentPage(page)}/>
+            <Pagination currentPage={currentPage}/>
         </div>
     );
 };

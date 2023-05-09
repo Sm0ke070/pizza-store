@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, SyntheticEvent, useRef, useState} from "react";
 import {SortType} from "../../pages/Home";
 import {useAppDispatch, useAppSelector} from "../../redux/store";
 import {setSort} from "../../redux/slices/filterSlice";
@@ -17,7 +17,14 @@ const Sort: FC = () => {
     const sort = useAppSelector(state => state.filter.sort)
     const [open, setOpen] = useState(false)
 
+    const refPopup = useRef<HTMLDivElement>(null)
+    const qwe = (event: SyntheticEvent) => {
+        if (event.target !== refPopup.current) {
+            debugger
+            setOpen(false)
+        }
 
+    }
     const onClickSortBy = (sort: SortType) => {
         dispatch(setSort(sort.sortProperty))
         setOpen(false)
@@ -41,7 +48,7 @@ const Sort: FC = () => {
                 <span onClick={() => setOpen(!open)}>{sort.name}</span>
             </div>
             {open &&
-                <div className="sort__popup">
+                <div className="sort__popup" onMouseLeave={(event) => qwe(event)} ref={refPopup}>
                     <ul>
                         {list.map((obj, i) => <li key={i} onClick={() => onClickSortBy(obj)}
                                                   className={sort.sortProperty === obj.sortProperty ? 'active' : ''}> {obj.name} </li>)}
