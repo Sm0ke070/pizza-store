@@ -1,16 +1,34 @@
 import React, {FC, useState} from 'react';
+import {useAppDispatch, useAppSelector} from "../../redux/store";
+import {addItem} from "../../redux/slices/cartSlice";
 
 type PizzaBlockPropsType = {
     title: string
+    id: number
     price: number
-    image: string
+    imageUrl: string
     sizes: number[]
     types: number[]
 }
-const PizzaBlock: FC<PizzaBlockPropsType> = ({price, title, image, sizes, types}) => {
-    const typesName = ['тонкое', 'традиционное']
+const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes, types}) => {
+
     const [activeType, setActiveType] = useState(types[0])
     const [activeSize, setActiveSize] = useState(sizes[0])
+    const cartItem = useAppSelector(state => state.cartReducer.items.find(obj => obj.id === id))
+    const dispatch = useAppDispatch()
+
+    const typesName = ['тонкое', 'традиционное']
+    const onClickAdd = () => {
+        const item = {
+            id,
+            title,
+            price,
+            imageUrl,
+            types: typesName[activeType],
+            sizes: activeSize
+        }
+        dispatch(addItem(item))
+    }
 
     const changeActiveType = (type: number) => {
         setActiveType(type)
@@ -23,7 +41,7 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({price, title, image, sizes, types}
             <div className="pizza-block">
                 <img
                     className="pizza-block__image"
-                    src={image}
+                    src={imageUrl}
                     alt="Pizza"
                 />
                 <h4 className="pizza-block__title">{title}</h4>
@@ -41,7 +59,7 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({price, title, image, sizes, types}
                 </div>
                 <div className="pizza-block__bottom">
                     <div className="pizza-block__price">от {price} ₽</div>
-                    <button className="button button--outline button--add">
+                    <button onClick={onClickAdd} className="button button--outline button--add">
                         <svg
                             width="12"
                             height="12"
@@ -55,7 +73,7 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({price, title, image, sizes, types}
                             />
                         </svg>
                         <span>Добавить</span>
-                        <i>2</i>
+                        {cartItem?.count && cartItem.count > 0 && <i>{cartItem.count}</i>}
                     </button>
                 </div>
             </div>

@@ -1,9 +1,9 @@
 import {FC, SyntheticEvent, useRef, useState} from "react";
 import {SortType} from "../../pages/Home";
 import {useAppDispatch, useAppSelector} from "../../redux/store";
-import {setSort} from "../../redux/slices/filterSlice";
+import {setSortProperty} from "../../redux/slices/filterSlice";
 
-const list: SortType[] = [
+export const sortList: SortType[] = [
     {name: 'популярности(DESC)', sortProperty: 'rating'},
     {name: 'популярности(ASC)', sortProperty: '-rating'},
     {name: 'цене(DESC)', sortProperty: 'price'},
@@ -14,19 +14,20 @@ const list: SortType[] = [
 const Sort: FC = () => {
 
     const dispatch = useAppDispatch()
+
+
     const sort = useAppSelector(state => state.filter.sort)
     const [open, setOpen] = useState(false)
 
     const refPopup = useRef<HTMLDivElement>(null)
-    const qwe = (event: SyntheticEvent) => {
+    const closePopup = (event: SyntheticEvent) => {
         if (event.target !== refPopup.current) {
-            debugger
             setOpen(false)
         }
-
     }
+
     const onClickSortBy = (sort: SortType) => {
-        dispatch(setSort(sort.sortProperty))
+        dispatch(setSortProperty({sort: sort.sortProperty, name: sort.name}))
         setOpen(false)
     }
     return (
@@ -48,10 +49,10 @@ const Sort: FC = () => {
                 <span onClick={() => setOpen(!open)}>{sort.name}</span>
             </div>
             {open &&
-                <div className="sort__popup" onMouseLeave={(event) => qwe(event)} ref={refPopup}>
+                <div className="sort__popup" onMouseLeave={(event) => closePopup(event)} ref={refPopup}>
                     <ul>
-                        {list.map((obj, i) => <li key={i} onClick={() => onClickSortBy(obj)}
-                                                  className={sort.sortProperty === obj.sortProperty ? 'active' : ''}> {obj.name} </li>)}
+                        {sortList.map((obj, i) => <li key={i} onClick={() => onClickSortBy(obj)}
+                                                      className={sort.sortProperty === obj.sortProperty ? 'active' : ''}> {obj.name} </li>)}
                     </ul>
                 </div>}
         </div>

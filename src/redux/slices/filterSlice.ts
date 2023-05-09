@@ -14,7 +14,7 @@ export interface filterState {
 const initialState: filterState = {
     categoryId: 0,
     currentPage: 1,
-    pageCount: 0,
+    pageCount: 3,
     sort: {
         name: 'популярности',
         sortProperty: 'rating'
@@ -28,18 +28,24 @@ export const filterSlice = createSlice({
         setCategoryId(state, action: PayloadAction<number>) {
             state.categoryId = action.payload
         },
-        setSort(state, action: PayloadAction<string>) {
-            state.sort.sortProperty = action.payload
+        setSortProperty(state, action: PayloadAction<{ sort: string, name: string }>) {
+            state.sort.sortProperty = action.payload.sort
+            state.sort.name = action.payload.name
         },
         setCurrentPage(state, action: PayloadAction<number>) {
             state.currentPage = action.payload
         },
         setPageCount(state, action: PayloadAction<number>) {
             state.pageCount = action.payload
+        },
+        setFilters(state, action: PayloadAction<any>) {
+            state.currentPage = Number(action.payload.currentPage)
+            state.categoryId = Number(action.payload.categoryId)
+            state.sort = action.payload.sort
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const {setCategoryId, setCurrentPage, setPageCount, setSort} = filterSlice.actions
+export const {setCategoryId, setFilters, setCurrentPage, setPageCount, setSortProperty} = filterSlice.actions
 export const filterReducer = filterSlice.reducer
