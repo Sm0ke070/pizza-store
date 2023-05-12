@@ -1,7 +1,7 @@
 import {FC, SyntheticEvent, useRef, useState} from "react";
 import {SortType} from "../../pages/Home";
 import {useAppDispatch, useAppSelector} from "../../redux/store";
-import {setSortProperty} from "../../redux/slices/filterSlice";
+import {selectFilter, setSortProperty} from "../../redux/slices/filterSlice";
 
 export const sortList: SortType[] = [
     {name: 'популярности(DESC)', sortProperty: 'rating'},
@@ -14,12 +14,11 @@ export const sortList: SortType[] = [
 const Sort: FC = () => {
 
     const dispatch = useAppDispatch()
-
-
-    const sort = useAppSelector(state => state.filter.sort)
+    const refPopup = useRef<HTMLDivElement>(null)
     const [open, setOpen] = useState(false)
 
-    const refPopup = useRef<HTMLDivElement>(null)
+    const {sort} = useAppSelector(selectFilter)
+
     const closePopup = (event: SyntheticEvent) => {
         if (event.target !== refPopup.current) {
             setOpen(false)

@@ -1,16 +1,19 @@
 import React, {FC} from 'react';
 import {Link} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../redux/store";
+import {RootState, useAppDispatch, useAppSelector} from "../redux/store";
 import CartItem from "../components/cart/CartItem";
-import {clearItems} from "../redux/slices/cartSlice";
+import {clearItems, selectCart} from "../redux/slices/cartSlice";
 import CartEmpty from "../components/cart/CartEmpty";
 
 const Cart: FC = () => {
 
     const dispatch = useAppDispatch()
-    const items = useAppSelector(state => state.cartReducer.items)
-    const totalPrice = useAppSelector(state => state.cartReducer.totalPrice)
+
+    const {items,totalPrice} = useAppSelector(selectCart)
     const totalCount = items.reduce((sum, item) => sum + item.count, 0)
+
+    //const items = useAppSelector(state => state.cart.items)
+    //const totalPrice = useAppSelector(state => state.cart.totalPrice)
 
     const onClickClearCart = () => {
         if (items.length) {

@@ -1,47 +1,45 @@
-import React, {FC, useContext, useEffect, useRef} from 'react';
+import React, {FC, useEffect, useRef} from 'react';
 
 import Categories from "../components/categories/Categories";
 import Sort, {sortList} from "../components/sort/Sort";
 import Skeleton from "../components/pizzaBlock/Skeleton";
 import PizzaBlock from "../components/pizzaBlock/PizzaBlock";
 import Pagination from "../components/pagination/Pagination";
-import {ContextType, SearchContext} from "../App";
 import {useAppDispatch, useAppSelector} from "../redux/store";
-import {setFilters} from "../redux/slices/filterSlice";
+import {selectFilter, selectSortProperty, setFilters} from "../redux/slices/filterSlice";
 import {useNavigate} from "react-router";
 import qs from 'qs'
-import {fetchPizzas} from "../redux/slices/pizzaSlice";
+import {fetchPizzas, selectPizza} from "../redux/slices/pizzaSlice";
 
 
 export type SortType = {
     name: string
     sortProperty: string
 }
-type HomePropsType = {
-    searchValue: string
-}
-const Home: FC<HomePropsType> = () => {
-    const {searchValue} = useContext<ContextType>(SearchContext);
+
+const Home: FC = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const status = useAppSelector(state => state.pizza.status)
 
-    const sort = useAppSelector(state => state.filter.sort)
-    const categoryId = useAppSelector(state => state.filter.categoryId)
-    const sortType = useAppSelector(state => state.filter.sort.sortProperty)
-    const currentPage = useAppSelector(state => state.filter.currentPage)
-    const items = useAppSelector(state => state.pizza.items)
+    const {sort, searchValue, categoryId, currentPage} = useAppSelector(selectFilter)
+    const {status, items} = useAppSelector(selectPizza)
+    const {sortProperty} = useAppSelector(selectSortProperty)
+
     const isSearch = useRef(false)
     const isMounted = useRef(false)
 
+    //const sort = useAppSelector(state => state.filter.sort)
+    //const categoryId = useAppSelector(state => state.filter.categoryId)
+    //const currentPage = useAppSelector(state => state.filter.currentPage)
+    //const items = useAppSelector(state => state.pizza.items)
+    //const status = useAppSelector(state => state.pizza.status)
 
-    console.log(items)
 
     const fetchPizzas2 = async () => {
         const category = categoryId > 0 ? `&category=${categoryId}` : ''
         const search = searchValue ? `&search=${searchValue}` : ''
-        const order = sortType.includes('-') ? 'asc' : 'desc'
-        const sortBy = sortType.replace('-', '')
+        const order = sortProperty.includes('-') ? 'asc' : 'desc'
+        const sortBy = sortProperty.replace('-', '')
 
         dispatch(fetchPizzas({category, search, order, sortBy, currentPage}))
     }
@@ -79,7 +77,7 @@ const Home: FC<HomePropsType> = () => {
             fetchPizzas2()
         }
         isSearch.current = false
-    }, [categoryId, sortType, searchValue, currentPage])
+    }, [categoryId, sortProperty, searchValue, currentPage])
 
 
     const pizzas = items.map(el => <PizzaBlock

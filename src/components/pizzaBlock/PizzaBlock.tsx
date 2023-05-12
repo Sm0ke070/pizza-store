@@ -11,10 +11,12 @@ type PizzaBlockPropsType = {
     types: number[]
 }
 const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes, types}) => {
+
+    const dispatch = useAppDispatch()
+
     const [activeType, setActiveType] = useState(0)
     const [activeSize, setActiveSize] = useState(0)
-    const cartItem = useAppSelector(state => state.cartReducer.items.find(obj => obj.id === id))
-    const dispatch = useAppDispatch()
+    const cartItem = useAppSelector(state => state.cart.items.find(obj => obj.id === id))
 
     const typesName = ['тонкое', 'традиционное']
 

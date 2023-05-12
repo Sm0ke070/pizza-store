@@ -3,12 +3,16 @@ import logoSvg from '../../assets/img/pizza-logo.svg'
 import {Link} from "react-router-dom";
 import Search from "../search/Search";
 import {useAppSelector} from "../../redux/store";
+import {selectCart} from "../../redux/slices/cartSlice";
 
 
 const Header: FC = () => {
-    const totalPrice = useAppSelector(state => state.cartReducer.totalPrice)
-    const items = useAppSelector(state => state.cartReducer.items)
+    const {items, totalPrice} = useAppSelector(selectCart)
     const totalCount = items.reduce((sum, item) => sum + item.count, 0)
+
+    //const totalPrice = useAppSelector(state => state.cart.totalPrice)
+    //const items = useAppSelector(state => state.cart.items)
+
     return (
         <div className="header">
             <div className="container">
