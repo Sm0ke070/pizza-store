@@ -36,6 +36,7 @@ const Home: FC<HomePropsType> = () => {
     const dispatch = useAppDispatch()
     const [items, setItems] = useState<pizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
+
     const sort = useAppSelector(state => state.filter.sort)
     const categoryId = useAppSelector(state => state.filter.categoryId)
     const sortType = useAppSelector(state => state.filter.sort.sortProperty)

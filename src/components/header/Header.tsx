@@ -7,7 +7,8 @@ import {useAppSelector} from "../../redux/store";
 
 const Header: FC = () => {
     const totalPrice = useAppSelector(state => state.cartReducer.totalPrice)
-    const totalItems = useAppSelector(state => state.cartReducer.items.length)
+    const items = useAppSelector(state => state.cartReducer.items)
+    const totalCount = items.reduce((sum, item) => sum + item.count, 0)
     return (
         <div className="header">
             <div className="container">
@@ -54,7 +55,7 @@ const Header: FC = () => {
                                 strokeLinejoin="round"
                             />
                         </svg>
-                        <span>{totalItems}</span>
+                        <span>{totalCount}</span>
                     </Link>
                 </div>
             </div>

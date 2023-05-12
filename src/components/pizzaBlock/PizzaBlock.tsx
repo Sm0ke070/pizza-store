@@ -11,24 +11,13 @@ type PizzaBlockPropsType = {
     types: number[]
 }
 const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes, types}) => {
-
-    const [activeType, setActiveType] = useState(types[0])
-    const [activeSize, setActiveSize] = useState(sizes[0])
+    const [activeType, setActiveType] = useState(0)
+    const [activeSize, setActiveSize] = useState(26)
     const cartItem = useAppSelector(state => state.cartReducer.items.find(obj => obj.id === id))
     const dispatch = useAppDispatch()
 
     const typesName = ['тонкое', 'традиционное']
-    const onClickAdd = () => {
-        const item = {
-            id,
-            title,
-            price,
-            imageUrl,
-            types: typesName[activeType],
-            sizes: activeSize
-        }
-        dispatch(addItem(item))
-    }
+
 
     const changeActiveType = (type: number) => {
         setActiveType(type)
@@ -36,6 +25,19 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes,
     const changeActiveSize = (size: number) => {
         setActiveSize(size)
     }
+    const onClickAdd = () => {
+        const item = {
+            id: id + activeSize,
+            title,
+            price,
+            imageUrl,
+            types: typesName[activeType],
+            sizes: activeSize,
+            count: 1
+        }
+        dispatch(addItem(item))
+    }
+    console.log(activeSize)
     return (
         <div className='pizza-block-wrapper'>
             <div className="pizza-block">
@@ -47,14 +49,14 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes,
                 <h4 className="pizza-block__title">{title}</h4>
                 <div className="pizza-block__selector">
                     <ul>
-                        {types.map((typeId) => <li key={typeId} className={activeType === typeId ? 'active' : ''}
-                                                   onClick={() => changeActiveType(typeId)}>
+                        {types.map((typeId, i) => <li key={i} className={activeType === typeId ? 'active' : ''}
+                                                      onClick={() => changeActiveType(typeId)}>
                             {typesName[typeId]}
                         </li>)}
                     </ul>
                     <ul>
-                        {sizes.map(size => <li key={size} className={activeSize === size ? 'active' : ''}
-                                               onClick={() => changeActiveSize(size)}>{size} см.</li>)}
+                        {sizes.map((size, i) => <li key={i} className={activeSize === size ? 'active' : ''}
+                                                    onClick={() => changeActiveSize(size)}>{size} см.</li>)}
                     </ul>
                 </div>
                 <div className="pizza-block__bottom">
