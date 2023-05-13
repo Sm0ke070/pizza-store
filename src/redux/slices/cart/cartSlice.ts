@@ -1,6 +1,16 @@
 import {createSelector, createSlice} from '@reduxjs/toolkit'
 import type {PayloadAction} from '@reduxjs/toolkit'
-import {RootState} from "../store";
+import {RootState} from "../../store";
+
+export interface Pizza {
+    id: string
+    title: string
+    imageUrl: string
+    type: string
+    sizes: number
+    price: number
+    count: number
+}
 
 export interface cartState {
     totalPrice: number,
@@ -11,15 +21,7 @@ const initialState: cartState = {
     totalPrice: 0,
     items: []
 }
-export type Pizza = {
-    id: number
-    title: string
-    imageUrl: string
-    types: string
-    sizes: number
-    price: number
-    count: number
-}
+
 
 export const cartSlice = createSlice({
     name: 'cart',
@@ -27,16 +29,23 @@ export const cartSlice = createSlice({
     reducers: {
         addItem(state, action: PayloadAction<Pizza>) {
             const findItemId = state.items.find(obj => obj.id === action.payload.id)
-            const findItemType = state.items.find(obj => obj.types === action.payload.types)
-            const findItemSize = state.items.find(obj => obj.sizes === action.payload.sizes)
-            if (findItemId && findItemType && findItemSize) {
+            if (findItemId) {
                 findItemId.count++
             } else {
                 state.items.push({...action.payload, count: action.payload.count})
             }
             state.totalPrice += action.payload.price
+            // const findItemId = state.items.find(obj => obj.id === action.payload.id)
+            // const findItemType = state.items.find(obj => obj.types === action.payload.types)
+            // const findItemSize = state.items.find(obj => obj.sizes === action.payload.sizes)
+            // if (findItemId && findItemType && findItemSize) {
+            //     findItemId.count++
+            // } else {
+            //     state.items.push({...action.payload, count: action.payload.count})
+            // }
+            // state.totalPrice += action.payload.price
         },
-        removeItem(state, action: PayloadAction<number>) {
+        removeItem(state, action: PayloadAction<string>) {
             const findItem = state.items.find(obj => obj.id === action.payload)
             state.items = state.items.filter(obj => obj.id !== action.payload)
             if (findItem) {
@@ -47,27 +56,34 @@ export const cartSlice = createSlice({
             state.items = []
             state.totalPrice = 0
         },
-        incrementCartItem(state, action: PayloadAction<{ id: number, type: string }>) {
+        incrementCartItem(state, action: PayloadAction<{ id: string, type: string }>) {
             const findItem = state.items.find(obj => obj.id === action.payload.id)
-            const findItemType = state.items.find(obj => obj.types === action.payload.type)
+            const findItemType = state.items.find(obj => obj.type === action.payload.type)
 
             if (findItem && findItemType) {
                 findItem.count++
                 state.totalPrice += findItem.price
             }
         },
-        decrementCartItem(state, action: PayloadAction<{ id: number }>) {
-            const findItem = state.items.find(obj => obj.id === action.payload.id)
+        decrementCartItem(state, action: PayloadAction<string>) {
+            const findItem = state.items.find((obj) => obj.id === action.payload)
+
             if (findItem) {
-                if (findItem.count <= 1) {
-                    state.items = state.items.filter(obj => obj.id !== action.payload.id)
-                    findItem.count--
-                    state.totalPrice -= findItem.price
-                    return
-                }
                 findItem.count--
                 state.totalPrice -= findItem.price
             }
+
+            // const findItem = state.items.find(obj => obj.id === action.payload.id)
+            // if (findItem) {
+            //     if (findItem.count <= 1) {
+            //         state.items = state.items.filter(obj => obj.id !== action.payload.id)
+            //         findItem.count--
+            //         state.totalPrice -= findItem.price
+            //         return
+            //     }
+            //     findItem.count--
+            //     state.totalPrice -= findItem.price
+            // }
         }
     },
 })

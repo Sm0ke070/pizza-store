@@ -1,15 +1,18 @@
 import React, {FC, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "../../redux/store";
-import {addItem} from "../../redux/slices/cartSlice";
+import {addItem, Pizza} from "../../redux/slices/cart/cartSlice";
+import {Link} from "react-router-dom";
 
 type PizzaBlockPropsType = {
     title: string
-    id: number
+    id: string
     price: number
     imageUrl: string
     sizes: number[]
     types: number[]
 }
+const typesName = ['тонкое', 'традиционное']
+
 const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes, types}) => {
 
     const dispatch = useAppDispatch()
@@ -18,49 +21,55 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes,
     const [activeSize, setActiveSize] = useState(0)
     const cartItem = useAppSelector(state => state.cart.items.find(obj => obj.id === id))
 
-    const typesName = ['тонкое', 'традиционное']
-
+    const addedCount = cartItem ? cartItem.count : 0;
 
     const changeActiveType = (type: number) => {
         setActiveType(type)
     }
     const changeActiveSize = (size: number) => {
         setActiveSize(size)
-        console.log(size)
+        console.log(sizes)
+        console.log('size-' + size, 'activeSize-' + activeSize)
     }
     const onClickAdd = () => {
-        const item = {
+        const item: Pizza = {
             id,
             title,
             price,
             imageUrl,
-            types: typesName[activeType],
+            type: typesName[activeType],
             sizes: sizes[activeSize],
-            count: 1
+            count: 0
         }
         dispatch(addItem(item))
         console.log(sizes[activeSize])
     }
 
     return (
-        <div className='pizza-block-wrapper'>
+        <div>
             <div className="pizza-block">
-                <img
-                    className="pizza-block__image"
-                    src={imageUrl}
-                    alt="Pizza"
-                />
+                <Link to={`/pizza/${id}`}>
+                    <div className="pizza-block__image-container">
+                        <img
+                            className="pizza-block__image"
+                            src={imageUrl}
+                            alt="Pizza"
+                        />
+                    </div>
+
+                </Link>
+
                 <h4 className="pizza-block__title">{title}</h4>
                 <div className="pizza-block__selector">
                     <ul>
                         {types.map((typeId, i) => <li key={typeId} className={activeType === typeId ? 'active' : ''}
-                                                      onClick={() => changeActiveType(typeId)}>
+                                                      onClick={() => setActiveType(typeId)}>
                             {typesName[typeId]}
                         </li>)}
                     </ul>
                     <ul>
-                        {sizes.map((size, i) => <li key={size} className={activeSize === size ? 'active' : ''}
-                                                    onClick={() => changeActiveSize(i)}>{size} см.</li>)}
+                        {sizes.map((size, i) => <li key={size} className={activeSize === i ? 'active' : ''}
+                                                    onClick={() => setActiveSize(i)}>{size} см.</li>)}
                     </ul>
                 </div>
                 <div className="pizza-block__bottom">
@@ -79,7 +88,7 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes,
                             />
                         </svg>
                         <span>Добавить</span>
-                        {cartItem?.count && cartItem.count > 0 && <i>{cartItem.count}</i>}
+                        {addedCount > 0 && <i>{addedCount}</i>}
                     </button>
                 </div>
             </div>

@@ -1,111 +1,165 @@
-import React from 'react';
-import qs from 'qs';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
-import { Categories, Sort, PizzaBlock, Skeleton, Pagination, sortList } from '../components';
-
-import { selectFilter } from '../redux/filter/selectors';
-import { setCategoryId, setCurrentPage, setFilters } from '../redux/slice';
-import axios from 'axios';
-import { SearchContext } from '../App';
-
-const Home = () => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const isSearch = React.useRef(false);
-    const isMounted = React.useRef(false);
-
-    const { categoryId, sort, currentPage } = useSelector(selectFilter);
-
-    const { searchValue } = React.useContext(SearchContext);
-    const [items, setItems] = React.useState([]);
-    const [isLoading, setIsLoading] = React.useState(true);
-
-    const onChangeCategory = React.useCallback((idx) => {
-        dispatch(setCategoryId(idx));
-    }, []);
-
-    const onChangePage = (page) => {
-        dispatch(setCurrentPage(page));
-    };
-
-    const fetchPizzas = () => {
-        setIsLoading(true);
-
-        const sortBy = sort.sortProperty.replace('-', '');
-        const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
-        const category = categoryId > 0 ? `category=${categoryId}` : '';
-        const search = searchValue ? `search=${searchValue}` : '';
-
-        axios
-            .get(
-                `https://626d16545267c14d5677d9c2.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}&${search}`,
-            )
-            .then((res) => {
-                setItems(res.data);
-                setIsLoading(false);
-            });
-    };
-
-    // Если изменили параметры и был первый рендер
-    React.useEffect(() => {
-        if (isMounted.current) {
-            const queryString = qs.stringify({
-                sortProperty: sort.sortProperty,
-                categoryId,
-                currentPage,
-            });
-
-            navigate(`?${queryString}`);
-        }
-        isMounted.current = true;
-    }, [categoryId, sort.sortProperty, currentPage]);
-
-    // Если был первый рендер, то проверяем URl-параметры и сохраняем в редуксе
-    React.useEffect(() => {
-        if (window.location.search) {
-            const params = qs.parse(window.location.search.substring(1));
-
-            const sort = sortList.find((obj) => obj.sortProperty === params.sortProperty);
-
-            dispatch(
-                setFilters({
-                    ...params,
-                    sort,
-                }),
-            );
-            isSearch.current = true;
-        }
-    }, []);
-
-    // Если был первый рендер, то запрашиваем пиццы
-    React.useEffect(() => {
-        window.scrollTo(0, 0);
-
-        if (!isSearch.current) {
-            fetchPizzas();
-        }
-
-        isSearch.current = false;
-    }, [categoryId, sort.sortProperty, searchValue, currentPage]);
-
-    const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
-
-    const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
-
-    return (
-        <div className="container">
-            <div className="content__top">
-                <Categories value={categoryId} onChangeCategory={onChangeCategory} />
-                <Sort value={sort} />
-            </div>
-            <h2 className="content__title">Все пиццы</h2>
-            <div className="content__items">{isLoading ? skeletons : pizzas}</div>
-
-            <Pagination currentPage={currentPage} onChangePage={onChangePage} />
-        </div>
-    );
-};
-
-export default Home;
+[
+    {
+        "id": "0",
+        "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/f035c7f46c0844069722f2bb3ee9f113_584x584.jpeg",
+        "title": "Пепперони Фреш с перцем",
+        "types": [
+            0,
+            1
+        ],
+        "sizes": [
+            26,
+            30,
+            40
+        ],
+        "price": 803,
+        "category": 1,
+        "rating": 4
+    },
+    {
+        "id": "1",
+        "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/2ffc31bb-132c-4c99-b894-53f7107a1441.jpg",
+        "title": "Сырная",
+        "types": [
+            0
+        ],
+        "sizes": [
+            26,
+            40
+        ],
+        "price": 245,
+        "category": 1,
+        "rating": 6
+    },
+    {
+        "id": "2",
+        "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/6652fec1-04df-49d8-8744-232f1032c44b.jpg",
+        "title": "Цыпленок барбекю",
+        "types": [
+            0
+        ],
+        "sizes": [
+            26,
+            40
+        ],
+        "price": 295,
+        "category": 1,
+        "rating": 4
+    },
+    {
+        "id": "3",
+        "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/af553bf5-3887-4501-b88e-8f0f55229429.jpg",
+        "title": "Кисло-сладкий цыпленок",
+        "types": [
+            1
+        ],
+        "sizes": [
+            26,
+            30,
+            40
+        ],
+        "price": 275,
+        "category": 2,
+        "rating": 2
+    },
+    {
+        "id": "4",
+        "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg",
+        "title": "Чизбургер-пицца",
+        "types": [
+            0,
+            1
+        ],
+        "sizes": [
+            26,
+            30,
+            40
+        ],
+        "price": 415,
+        "category": 3,
+        "rating": 8
+    },
+    {
+        "id": "5",
+        "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/1e1a6e80-b3ba-4a44-b6b9-beae5b1fbf27.jpg",
+        "title": "Крэйзи пепперони",
+        "types": [
+            0
+        ],
+        "sizes": [
+            30,
+            40
+        ],
+        "price": 580,
+        "category": 2,
+        "rating": 2
+    },
+    {
+        "id": "6",
+        "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/d2e337e9-e07a-4199-9cc1-501cc44cb8f8.jpg",
+        "title": "Пепперони",
+        "types": [
+            0,
+            1
+        ],
+        "sizes": [
+            26,
+            30,
+            40
+        ],
+        "price": 675,
+        "category": 1,
+        "rating": 9
+    },
+    {
+        "id": "7",
+        "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/d48003cd-902c-420d-9f28-92d9dc5f73b4.jpg",
+        "title": "Маргарита",
+        "types": [
+            0,
+            1
+        ],
+        "sizes": [
+            26,
+            30,
+            40
+        ],
+        "price": 450,
+        "category": 4,
+        "rating": 10
+    },
+    {
+        "id": "8",
+        "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/ec29465e-606b-4a04-a03e-da3940d37e0e.jpg",
+        "title": "Четыре сезона",
+        "types": [
+            0,
+            1
+        ],
+        "sizes": [
+            26,
+            30,
+            40
+        ],
+        "price": 395,
+        "category": 5,
+        "rating": 10
+    },
+    {
+        "id": "9",
+        "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/30367198-f3bd-44ed-9314-6f717960da07.jpg",
+        "title": "Овощи и грибы 🌱",
+        "types": [
+            0,
+            1
+        ],
+        "sizes": [
+            26,
+            30,
+            40
+        ],
+        "price": 285,
+        "category": 5,
+        "rating": 7
+    }
+]

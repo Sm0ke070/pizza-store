@@ -1,26 +1,23 @@
 import React, {FC, useCallback} from "react";
-import {setCategoryId} from "../../redux/slices/filterSlice";
+import {selectFilter, setCategoryId} from "../../redux/slices/filter/filterSlice";
 import {useAppDispatch, useAppSelector} from "../../redux/store";
 
 
+const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые',]
 const Categories: FC = () => {
 
     const dispatch = useAppDispatch()
-    const categoryId = useAppSelector(state => state.filter.categoryId)
+    const {categoryId} = useAppSelector(selectFilter)
 
-    // const changeActiveIndex2 = (index: number) => {
-    //     dispatch(setCategoryId(index))
-    // }
     const changeActiveIndex = useCallback((index: number) => {
         dispatch(setCategoryId(index))
     }, []);
-    const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые',]
 
     return (
         <div className="categories">
             <ul>
-                {categories.map((categoryName, index) => <li key={index} onClick={() => changeActiveIndex(index)}
-                                                             className={categoryId === index ? 'active' : ''}>{categoryName}</li>)}
+                {categories.map((categoryName, i) => <li key={i} onClick={() => changeActiveIndex(i)}
+                                                         className={categoryId === i ? 'active' : ''}>{categoryName}</li>)}
             </ul>
         </div>
     )
