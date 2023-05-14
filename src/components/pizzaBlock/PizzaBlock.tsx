@@ -57,9 +57,9 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes,
                         />
                     </div>
 
-                </Link>
 
-                <h4 className="pizza-block__title">{title}</h4>
+                    <h4 className="pizza-block__title">{title}</h4>
+                </Link>
                 <div className="pizza-block__selector">
                     <ul>
                         {types.map((typeId, i) => <li key={typeId} className={activeType === typeId ? 'active' : ''}

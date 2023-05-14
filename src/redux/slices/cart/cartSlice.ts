@@ -32,7 +32,7 @@ export const cartSlice = createSlice({
             if (findItemId) {
                 findItemId.count++
             } else {
-                state.items.push({...action.payload, count: action.payload.count})
+                state.items.push({...action.payload, count: 1,})
             }
             state.totalPrice += action.payload.price
             // const findItemId = state.items.find(obj => obj.id === action.payload.id)

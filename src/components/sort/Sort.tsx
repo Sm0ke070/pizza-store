@@ -1,15 +1,15 @@
 import React, {FC, useRef, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/store";
-import {selectFilter, setSortProperty, SortType} from "../../redux/slices/filter/filterSlice";
+import {selectFilter, setSortProperty, sortPropertyEnum, SortType} from "../../redux/slices/filter/filterSlice";
 
 
 export const sortList: SortType[] = [
-    {name: 'популярности ▼', sortProperty: 'rating'},
-    {name: 'популярности ▲', sortProperty: '-rating'},
-    {name: 'цене ▼', sortProperty: 'price'},
-    {name: 'цене ▲', sortProperty: '-price'},
-    {name: 'алфавиту ▼', sortProperty: 'title'},
-    {name: 'алфавиту ▲', sortProperty: '-title'},
+    {name: 'популярности ▼', sortProperty: sortPropertyEnum.RATING_DESC},
+    {name: 'популярности ▲', sortProperty: sortPropertyEnum.RATING_ASC},
+    {name: 'цене ▼', sortProperty: sortPropertyEnum.PRICE_DESC},
+    {name: 'цене ▲', sortProperty: sortPropertyEnum.PRICE_ASC},
+    {name: 'алфавиту ▼', sortProperty: sortPropertyEnum.TITLE_DESC},
+    {name: 'алфавиту ▲', sortProperty: sortPropertyEnum.TITLE_ASC},
 ]
 const Sort: FC = () => {
 

@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {useAppDispatch} from "../../redux/store";
 import {decrementCartItem, incrementCartItem, removeItem} from "../../redux/slices/cart/cartSlice";
+import clsx from "clsx";
 
 type CartItemPropsType = {
     id: string
@@ -40,8 +41,9 @@ const CartItem: FC<CartItemPropsType> = ({id, size, count, type, price, imageUrl
 
             </div>
             <div className="cart__item-count">
-                <div onClick={onClickDecrementItem}
-                     className="button button--outline button--circle cart__item-count-minus">
+                <button onClick={onClickDecrementItem}
+                        disabled={count <= 1}
+                        className={clsx("button button--outline button--circle cart__item-count-minus", {"cart__item-count-minus--disabled": count === 1})}>
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none"
                          xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -52,10 +54,10 @@ const CartItem: FC<CartItemPropsType> = ({id, size, count, type, price, imageUrl
                             fill="#EB5A1E"></path>
                     </svg>
 
-                </div>
+                </button>
                 <b>{count}</b>
-                <div onClick={onClickIncrementItem}
-                     className="button button--outline button--circle cart__item-count-plus">
+                <button onClick={onClickIncrementItem}
+                        className="button button--outline button--circle cart__item-count-plus">
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none"
                          xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -66,7 +68,7 @@ const CartItem: FC<CartItemPropsType> = ({id, size, count, type, price, imageUrl
                             fill="#EB5A1E"></path>
                     </svg>
 
-                </div>
+                </button>
             </div>
             <div className="cart__item-price">
                 <b>{price * count} ₽</b>

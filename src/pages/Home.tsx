@@ -6,7 +6,7 @@ import Skeleton from "../components/pizzaBlock/Skeleton";
 import PizzaBlock from "../components/pizzaBlock/PizzaBlock";
 import Pagination from "../components/pagination/Pagination";
 import {useAppDispatch, useAppSelector} from "../redux/store";
-import {selectFilter, selectSortProperty} from "../redux/slices/filter/filterSlice";
+import {selectFilter, selectSortProperty, setFilters} from "../redux/slices/filter/filterSlice";
 import {useNavigate} from "react-router";
 import {fetchPizzas, selectPizza} from "../redux/slices/pizza/pizzaSlice";
 
