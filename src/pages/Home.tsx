@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useRef} from 'react';
 
 import Categories from "../components/categories/Categories";
-import Sort from "../components/sort/Sort";
+import SortPopup from "../components/sort/SortPopup";
 import Skeleton from "../components/pizzaBlock/Skeleton";
 import PizzaBlock from "../components/pizzaBlock/PizzaBlock";
 import Pagination from "../components/pagination/Pagination";
@@ -84,8 +84,8 @@ const Home: FC = () => {
     return (
         <div className="container">
             <div className="content__top">
-                <Categories/>
-                <Sort/>
+                <Categories categoryId={categoryId}/>
+                <SortPopup sort={sort}/>
             </div>
             <h2 className="content__title">Все пиццы</h2>
             {status === 'error'

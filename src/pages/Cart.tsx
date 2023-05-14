@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {Link} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../redux/store";
 import CartItem from "../components/cart/CartItem";
@@ -10,6 +10,10 @@ const Cart: FC = () => {
     const dispatch = useAppDispatch()
     const {items, totalPrice} = useAppSelector(selectCart)
     const totalCount = items.reduce((sum, item) => sum + item.count, 0)
+    useEffect(() => {
+        localStorage.getItem('pizzas')
+    }, [])
+
     const onClickClearCart = () => {
         if (items.length) {
             // if (window.confirm('Очистить корзину?')) {

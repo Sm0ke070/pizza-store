@@ -1,13 +1,15 @@
 import React, {FC, useCallback} from "react";
-import {selectFilter, setCategoryId} from "../../redux/slices/filter/filterSlice";
-import {useAppDispatch, useAppSelector} from "../../redux/store";
+import {setCategoryId} from "../../redux/slices/filter/filterSlice";
+import {useAppDispatch} from "../../redux/store";
 
 
 const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые',]
-const Categories: FC = () => {
+type CategoriesPropsType = {
+    categoryId: number
+}
+const Categories: FC<CategoriesPropsType> = ({categoryId}) => {
 
     const dispatch = useAppDispatch()
-    const {categoryId} = useAppSelector(selectFilter)
 
     const changeActiveIndex = useCallback((index: number) => {
         dispatch(setCategoryId(index))
