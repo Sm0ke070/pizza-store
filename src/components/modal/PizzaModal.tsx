@@ -1,11 +1,11 @@
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import Modal from "react-modal";
 import styles from './pizzaModal.module.scss'
 import PizzaButton from "../pizzaBlock/PizzaButton";
 
 type MyModalPropsType = {
     isOpen: boolean;
-    closeModal: () => void;
+    closeModal: (isOpen: boolean) => void;
     title: string
     id: string
     price: number
@@ -16,7 +16,6 @@ type MyModalPropsType = {
     type: string
     //sizes: number[]
     //types: number[]
-
 }
 
 const PizzaModal: FC<MyModalPropsType> = ({
@@ -31,6 +30,18 @@ const PizzaModal: FC<MyModalPropsType> = ({
                                               addedCount,
                                               onClickAdd
                                           }) => {
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.classList.add('modal-open')
+        } else {
+            document.body.classList.remove('modal-open')
+        }
+        return () => {
+            document.body.classList.remove('modal-open')
+        };
+    }, [isOpen])
+
     const modalStyles = {
         content: {
             minWidth: '320px',
@@ -46,26 +57,27 @@ const PizzaModal: FC<MyModalPropsType> = ({
     };
     return (
         <>
-            <Modal style={modalStyles} isOpen={isOpen} onRequestClose={closeModal}>
+            <Modal style={modalStyles} isOpen={isOpen} onRequestClose={() => closeModal(false)}>
                 <div className={styles.root}>
 
                     <div className={styles.pizza}>
-                        <img style={{width: '300px'}} src={imageUrl} alt="pizza image"/>
+                        <img style={{width: '250px'}} src={imageUrl} alt="pizza_image"/>
                     </div>
 
                     <div className={styles.description}>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet cupiditate dignissimos distinctio
-                        dolorem eaque enim eum incidunt libero maiores, minus nobis obcaecati quisquam reiciendis
-                        reprehenderit tempora? Deserunt quos sapiente ullam!
+                        <div>
+                            <h2>{title}</h2>
+                            <h3 style={{color: '#B2B4B6FF'}}>Состав:</h3>
+                            <span>сыр моцарелла, томаты, итальянские травы, фирменный томатный соус.</span>
+                        </div>
+
 
                         <div>
                             <div className={styles.current}> {title}, {type}, {size} см, {price}₽.</div>
                             <PizzaButton onClickAdd={onClickAdd} addedCount={addedCount}/>
                         </div>
-
                     </div>
                 </div>
-
             </Modal>
         </>
 

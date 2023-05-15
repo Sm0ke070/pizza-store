@@ -3,6 +3,7 @@ import {useAppDispatch} from "../../redux/store";
 import {addItem, decrementCartItem, removeItem} from "../../redux/cart/cartSlice";
 import clsx from "clsx";
 import {Pizza} from "../../redux/cart/types";
+import styles from './cartItem.module.scss'
 
 type CartItemPropsType = {
     id: string
@@ -38,17 +39,21 @@ const CartItem: FC<CartItemPropsType> = ({id, size, count, type, price, imageUrl
 
     return (
         <div className="cart__item">
-            <div className="cart__item-img">
-                <img className="pizza-block__image"
-                     src={imageUrl}
-                     alt="Pizza"/>
-            </div>
-            <div className="cart__item-info">
-                <h3>{title}</h3>
+            <div className={styles.imageTitle}>
+                <div className="cart__item-img">
+                    <img className="pizza-block__image"
+                         src={imageUrl}
+                         alt="Pizza"/>
+                </div>
 
-                <p>{type}, {size} см.</p>
+                <div className="cart__item-info">
+                    <h3>{title}</h3>
 
+                    <p>{type}, {size} см.</p>
+
+                </div>
             </div>
+
             <div className="cart__item-count">
                 <button onClick={onClickDecrementItem}
                         disabled={count <= 1}
@@ -82,8 +87,8 @@ const CartItem: FC<CartItemPropsType> = ({id, size, count, type, price, imageUrl
             <div className="cart__item-price">
                 <b>{price * count} ₽</b>
             </div>
-            <div onClick={onClickRemoveItem} className="cart__item-remove">
-                <div className="button button--outline button--circle">
+            <div className="cart__item-remove">
+                <button onClick={onClickRemoveItem} className="button button--outline button--circle">
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none"
                          xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -94,7 +99,7 @@ const CartItem: FC<CartItemPropsType> = ({id, size, count, type, price, imageUrl
                             fill="#EB5A1E"></path>
                     </svg>
 
-                </div>
+                </button>
             </div>
         </div>
     );
