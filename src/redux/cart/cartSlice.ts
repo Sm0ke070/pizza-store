@@ -1,25 +1,14 @@
-import {createSelector, createSlice} from '@reduxjs/toolkit'
+import {createSlice} from '@reduxjs/toolkit'
 import type {PayloadAction} from '@reduxjs/toolkit'
-import {RootState} from "../../store";
+import {getCartFromLS} from "../../utils/getCartFromLS";
+import {calcTotalPrice} from "../../utils/calcTotalPrice";
+import {cartState, Pizza} from "./types";
 
-export interface Pizza {
-    id: string
-    title: string
-    imageUrl: string
-    type: string
-    sizes: number
-    price: number
-    count: number
-}
 
-export interface cartState {
-    totalPrice: number,
-    items: Pizza[]
-}
-
+const {items, totalPrice} = getCartFromLS()
 const initialState: cartState = {
-    totalPrice: 0,
-    items: []
+    totalPrice,
+    items
 }
 
 
@@ -28,13 +17,23 @@ export const cartSlice = createSlice({
     initialState,
     reducers: {
         addItem(state, action: PayloadAction<Pizza>) {
-            const findItemId = state.items.find(obj => obj.id === action.payload.id)
+
+            const findItemId = state.items.find((obj) => obj.id === action.payload.id);
+            //const findItemType = state.items.find((obj) => obj.type === action.payload.type);
+            //const findItemSize = state.items.find((obj) => obj.size === action.payload.size);
+
+            //console.log(action.payload.type, action.payload.size, action.payload.title)
+
             if (findItemId) {
                 findItemId.count++
             } else {
-                state.items.push({...action.payload, count: 1,})
+                state.items.push({
+                    ...action.payload,
+                    count: 1,
+                });
             }
-            state.totalPrice += action.payload.price
+            state.totalPrice = calcTotalPrice(state.items);
+
             // const findItemId = state.items.find(obj => obj.id === action.payload.id)
             // const findItemType = state.items.find(obj => obj.types === action.payload.types)
             // const findItemSize = state.items.find(obj => obj.sizes === action.payload.sizes)
@@ -46,11 +45,8 @@ export const cartSlice = createSlice({
             // state.totalPrice += action.payload.price
         },
         removeItem(state, action: PayloadAction<string>) {
-            const findItem = state.items.find(obj => obj.id === action.payload)
-            state.items = state.items.filter(obj => obj.id !== action.payload)
-            if (findItem) {
-                state.totalPrice = state.totalPrice - findItem.price * findItem.count
-            }
+            state.items = state.items.filter((obj) => obj.id !== action.payload);
+            state.totalPrice = calcTotalPrice(state.items);
         },
         clearItems(state) {
             state.items = []
@@ -58,9 +54,8 @@ export const cartSlice = createSlice({
         },
         incrementCartItem(state, action: PayloadAction<{ id: string, type: string }>) {
             const findItem = state.items.find(obj => obj.id === action.payload.id)
-            const findItemType = state.items.find(obj => obj.type === action.payload.type)
 
-            if (findItem && findItemType) {
+            if (findItem) {
                 findItem.count++
                 state.totalPrice += findItem.price
             }
@@ -87,7 +82,6 @@ export const cartSlice = createSlice({
         }
     },
 })
-const selectSelf = (state: RootState) => state
-export const selectCart = createSelector(selectSelf, (state: RootState) => state.cart)
+
 export const {addItem, incrementCartItem, decrementCartItem, removeItem, clearItems} = cartSlice.actions
 export const cartReducer = cartSlice.reducer

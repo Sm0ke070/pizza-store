@@ -14,7 +14,7 @@ body {
   border-radius: 10px;
   max-width: 1400px;
 
-  @media (max-width: 645px) {
+  @media (max-width: 1030px) {
     width: calc(100vw - 30px);
     margin-top: 15px;
   }
@@ -50,20 +50,20 @@ body {
   &__items {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: repeat(1, 1fr);
     grid-column-gap: 11px;
-    align-items: end;
+    align-items: start;
     @media (max-width: 1400px) {
       grid-template-columns: repeat(3, 1fr);
-    }
-    @media (max-width: 1400px) {
-      grid-template-columns: repeat(3, 1fr);
+      justify-items: center;
     }
     @media (max-width: 1055px) {
       grid-template-columns: repeat(2, 1fr);
+      justify-items: center;
     }
     @media (max-width: 750px) {
       grid-template-columns: repeat(1, 1fr);
+      justify-items: center;
     }
   }
 

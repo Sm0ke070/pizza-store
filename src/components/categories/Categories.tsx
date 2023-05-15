@@ -1,5 +1,5 @@
 import React, {FC, useCallback} from "react";
-import {setCategoryId} from "../../redux/slices/filter/filterSlice";
+import {setCategoryId} from "../../redux/filter/filterSlice";
 import {useAppDispatch} from "../../redux/store";
 
 

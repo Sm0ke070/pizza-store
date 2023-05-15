@@ -4,7 +4,8 @@ import searchIcon from '../../assets/img/serach-input.svg';
 import closeIcon from '../../assets/img/clear-input.svg';
 import debounce from 'lodash.debounce';
 import {useAppDispatch, useAppSelector} from "../../redux/store";
-import {selectFilter, setSearchValue} from "../../redux/slices/filter/filterSlice";
+import {setSearchValue} from "../../redux/filter/filterSlice";
+import {selectFilter} from "../../redux/filter/selectors";
 
 const Search: FC = () => {
     const dispatch = useAppDispatch()

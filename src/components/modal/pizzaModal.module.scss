@@ -1,0 +1,24 @@
+.root {
+  display: flex;
+  border-radius: 10px;
+  @media (max-width: 1660px) {
+    flex-direction: column;
+
+  }
+
+  .pizza {
+    display: flex;
+    align-items: center;
+    justify-content: center
+  }
+
+  .description {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .current {
+      color: rgb(178, 180, 182);
+    }
+  }
+}

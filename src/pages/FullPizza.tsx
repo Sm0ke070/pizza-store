@@ -1,11 +1,10 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router";
 import axios from "axios";
-import {Pizza} from "../redux/slices/cart/cartSlice";
-
+import {Pizza} from "../redux/cart/types";
 
 const FullPizza: FC = () => {
-    const {id} = useParams()
+    const {id} = useParams<string>()
     const navigate = useNavigate()
     const [pizza, setPizza] = useState<Pizza>()
 

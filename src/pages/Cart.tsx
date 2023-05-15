@@ -2,8 +2,9 @@ import React, {FC, useEffect} from 'react';
 import {Link} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../redux/store";
 import CartItem from "../components/cart/CartItem";
-import {clearItems, selectCart} from "../redux/slices/cart/cartSlice";
+import {clearItems} from "../redux/cart/cartSlice";
 import CartEmpty from "../components/cart/CartEmpty";
+import {selectCart} from "../redux/cart/selectors";
 
 const Cart: FC = () => {
 
@@ -70,7 +71,7 @@ const Cart: FC = () => {
                                                 id={obj.id}
                                                 title={obj.title}
                                                 key={obj.id}
-                                                size={obj.sizes}/>)}
+                                                size={obj.size}/>)}
 
 
                 </div>

@@ -3,11 +3,10 @@ import logoSvg from '../../assets/img/pizza-logo.svg'
 import {Link, useLocation} from "react-router-dom";
 import Search from "../search/Search";
 import {useAppSelector} from "../../redux/store";
-import {selectCart} from "../../redux/slices/cart/cartSlice";
+import {selectCart} from "../../redux/cart/selectors";
 
 
 const Header: FC = () => {
-
     const {pathname} = useLocation()
     const {items, totalPrice} = useAppSelector(selectCart)
     const totalCount = items.reduce((sum, item) => sum + item.count, 0)
@@ -16,11 +15,10 @@ const Header: FC = () => {
     useEffect(() => {
         if (isMounted.current) {
             const json = JSON.stringify(items)
-            localStorage.setItem('cart', json)
+            localStorage.setItem('react-pizza-cart', json)
         }
         isMounted.current = true
     }, [items])
-
 
     return (
         <div className="header">

@@ -1,7 +1,8 @@
 import React, {FC} from 'react';
 import {useAppDispatch} from "../../redux/store";
-import {decrementCartItem, incrementCartItem, removeItem} from "../../redux/slices/cart/cartSlice";
+import {addItem, decrementCartItem, removeItem} from "../../redux/cart/cartSlice";
 import clsx from "clsx";
+import {Pizza} from "../../redux/cart/types";
 
 type CartItemPropsType = {
     id: string
@@ -17,7 +18,15 @@ const CartItem: FC<CartItemPropsType> = ({id, size, count, type, price, imageUrl
     const dispatch = useAppDispatch()
 
     const onClickIncrementItem = () => {
-        dispatch(incrementCartItem({id, type}))
+        dispatch(addItem({
+            id,
+            type,
+            title,
+            imageUrl,
+            size,
+            price,
+            count,
+        } as Pizza))
     }
     const onClickDecrementItem = () => {
         dispatch(decrementCartItem(id))
