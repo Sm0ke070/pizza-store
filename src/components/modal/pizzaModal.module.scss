@@ -1,9 +1,22 @@
 .root {
   display: flex;
   border-radius: 10px;
+
+  .closeModal {
+    color: #b0b0b0;
+    margin-left: 95%;
+    border: none;
+    background-color: white;
+    font-size: 17px;
+
+    &:hover {
+      color: black;
+      border-radius: 6px;
+    }
+  }
+
   @media (max-width: 1660px) {
     flex-direction: column;
-
   }
 
   .pizza {

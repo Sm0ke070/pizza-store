@@ -8,9 +8,9 @@ import {selectCart} from "../../redux/cart/selectors";
 
 const Header: FC = () => {
     const {pathname} = useLocation()
+    const isMounted = useRef(false)
     const {items, totalPrice} = useAppSelector(selectCart)
     const totalCount = items.reduce((sum, item) => sum + item.count, 0)
-    const isMounted = useRef(false);
 
     useEffect(() => {
         if (isMounted.current) {

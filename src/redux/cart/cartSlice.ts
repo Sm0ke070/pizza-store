@@ -17,12 +17,7 @@ export const cartSlice = createSlice({
     initialState,
     reducers: {
         addItem(state, action: PayloadAction<Pizza>) {
-
             const findItemId = state.items.find((obj) => obj.id === action.payload.id);
-            //const findItemType = state.items.find((obj) => obj.type === action.payload.type);
-            //const findItemSize = state.items.find((obj) => obj.size === action.payload.size);
-
-            //console.log(action.payload.type, action.payload.size, action.payload.title)
 
             if (findItemId) {
                 findItemId.count++
@@ -33,16 +28,6 @@ export const cartSlice = createSlice({
                 });
             }
             state.totalPrice = calcTotalPrice(state.items);
-
-            // const findItemId = state.items.find(obj => obj.id === action.payload.id)
-            // const findItemType = state.items.find(obj => obj.types === action.payload.types)
-            // const findItemSize = state.items.find(obj => obj.sizes === action.payload.sizes)
-            // if (findItemId && findItemType && findItemSize) {
-            //     findItemId.count++
-            // } else {
-            //     state.items.push({...action.payload, count: action.payload.count})
-            // }
-            // state.totalPrice += action.payload.price
         },
         removeItem(state, action: PayloadAction<string>) {
             state.items = state.items.filter((obj) => obj.id !== action.payload);

@@ -9,6 +9,7 @@ import {useNavigate} from "react-router";
 import {selectPizza} from "../redux/pizza/selectors";
 import {selectFilter, selectSortProperty} from "../redux/filter/selectors";
 import {fetchPizzas} from "../redux/pizza/asyncActions";
+import axios from "axios";
 
 
 const Home: FC = () => {
@@ -42,6 +43,7 @@ const Home: FC = () => {
         // }
         // isMounted.current = true
         getPizzas()
+        axios.post("https://api.green-api.com/waInstance{1101821022}/SendMessage/{d533bf6949c642219f18217a873c3368ae2d1321f707470a97}")
     }, [categoryId, currentPage, sort.sortProperty, searchValue])
 
 
@@ -76,6 +78,7 @@ const Home: FC = () => {
             price={obj.price}
             sizes={obj.sizes}
             types={obj.types}
+            description={obj.description}
         />
     )
 

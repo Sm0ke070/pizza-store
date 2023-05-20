@@ -11,6 +11,7 @@ const Cart: FC = () => {
     const dispatch = useAppDispatch()
     const {items, totalPrice} = useAppSelector(selectCart)
     const totalCount = items.reduce((sum, item) => sum + item.count, 0)
+
     useEffect(() => {
         localStorage.getItem('pizzas')
     }, [])

@@ -2,8 +2,6 @@ import React, {FC, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "../../redux/store";
 import {addItem} from "../../redux/cart/cartSlice";
 import {Pizza} from "../../redux/cart/types";
-import {useNavigate} from "react-router";
-import FullPizza from "../../pages/FullPizza";
 import PizzaModal from "../modal/PizzaModal";
 import PizzaButton from "./PizzaButton";
 
@@ -14,13 +12,13 @@ type PizzaBlockPropsType = {
     imageUrl: string
     sizes: number[]
     types: number[]
+    description: string
 }
 const typesName = ['тонкое', 'традиционное']
 
-const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes, types}) => {
+const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes, types, description}) => {
 
     const dispatch = useAppDispatch()
-    const navigate = useNavigate()
     const [activeType, setActiveType] = useState(0)
     const [activeSize, setActiveSize] = useState(0)
     const [open, setOpen] = useState(false)
@@ -36,7 +34,8 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes,
             imageUrl,
             type: typesName[activeType],
             size: sizes[activeSize],
-            count: 0
+            description,
+            count: 0,
         }
         dispatch(addItem(item))
     }
@@ -45,7 +44,6 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes,
         <div>
 
             <div className="pizza-block">
-                {/*<Link onClick={onClickNavigateToPizza} to={`/pizza/${id}`}>*/}
                 <PizzaModal isOpen={open}
                             closeModal={() => setOpen(!open)}
                             id={id}
@@ -56,6 +54,7 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({id, price, title, imageUrl, sizes,
                             addedCount={addedCount}
                             size={sizes[activeSize]}
                             type={typesName[activeType]}
+                            description={description}
                 />
                 <div onClick={() => setOpen(true)} className="pizza-block__image-container">
                     <img

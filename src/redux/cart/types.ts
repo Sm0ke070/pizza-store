@@ -5,6 +5,7 @@ export interface Pizza {
     type: string
     size: number
     price: number
+    description: string
     count: number
 }
 

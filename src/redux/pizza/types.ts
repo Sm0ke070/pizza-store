@@ -17,6 +17,7 @@ export type PizzasResponse = {
     sizes: number[]
     price: number
     count: number
+    description: string
 }
 
 export interface SearchPizzaParams { //type FetchPizzasArgs = Record<string, string>

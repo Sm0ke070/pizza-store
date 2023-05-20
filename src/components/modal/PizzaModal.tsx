@@ -12,10 +12,9 @@ type MyModalPropsType = {
     imageUrl: string
     onClickAdd: () => void
     addedCount: number
+    description: string
     size: number
     type: string
-    //sizes: number[]
-    //types: number[]
 }
 
 const PizzaModal: FC<MyModalPropsType> = ({
@@ -28,7 +27,8 @@ const PizzaModal: FC<MyModalPropsType> = ({
                                               imageUrl,
                                               closeModal,
                                               addedCount,
-                                              onClickAdd
+                                              onClickAdd,
+                                              description
                                           }) => {
 
     useEffect(() => {
@@ -52,26 +52,23 @@ const PizzaModal: FC<MyModalPropsType> = ({
             marginRight: '-35%',
             borderRadius: '10px',
             backgroundColor: '#fff',
-            transform: 'translate(-50%, -50%)'
+            transform: 'translate(-50%, -50%)',
         },
-    };
+    }
     return (
-        <>
+        <div>
             <Modal style={modalStyles} isOpen={isOpen} onRequestClose={() => closeModal(false)}>
                 <div className={styles.root}>
-
+                    <button onClick={() => closeModal(false)} className={styles.closeModal}>X</button>
                     <div className={styles.pizza}>
                         <img style={{width: '250px'}} src={imageUrl} alt="pizza_image"/>
                     </div>
-
                     <div className={styles.description}>
                         <div>
                             <h2>{title}</h2>
                             <h3 style={{color: '#B2B4B6FF'}}>Состав:</h3>
-                            <span>сыр моцарелла, томаты, итальянские травы, фирменный томатный соус.</span>
+                            <span>{description}</span>
                         </div>
-
-
                         <div>
                             <div className={styles.current}> {title}, {type}, {size} см, {price}₽.</div>
                             <PizzaButton onClickAdd={onClickAdd} addedCount={addedCount}/>
@@ -79,7 +76,7 @@ const PizzaModal: FC<MyModalPropsType> = ({
                     </div>
                 </div>
             </Modal>
-        </>
+        </div>
 
     );
 };
