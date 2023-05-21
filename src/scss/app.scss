@@ -18,6 +18,7 @@ body {
   border-radius: 10px;
   max-width: 1400px;
 
+
   @media (max-width: 1030px) {
     width: calc(100vw - 30px);
     margin-top: 15px;
@@ -57,6 +58,7 @@ body {
     grid-template-rows: repeat(1, 1fr);
     grid-column-gap: 11px;
     align-items: start;
+
     @media (max-width: 1400px) {
       grid-template-columns: repeat(3, 1fr);
       justify-items: center;
@@ -159,6 +161,7 @@ body {
     svg,
     path {
       transition: all $duration ease-in-out;
+
     }
 
     &:hover {
@@ -175,7 +178,8 @@ body {
   }
 
   .content__items {
-    display: block;
+    display: flex;
+    flex-direction: column
   }
 
   &__item {
@@ -184,6 +188,9 @@ body {
     border-top: 1px solid $gray-line;
     padding-top: 30px;
     margin-top: 30px;
+    @media (max-width: 770px) {
+      flex-direction: column;
+    }
 
     &-img {
       display: flex;
@@ -192,8 +199,8 @@ body {
       width: 10%;
 
       img {
-        width: 80px;
         height: 80px;
+        width: 80px;
       }
     }
 
@@ -201,7 +208,8 @@ body {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      width: 40%;
+      width: 300px;
+      padding-left: 30px;
       @media (max-width: 760px) {
         align-items: center;
       }
@@ -339,7 +347,6 @@ body {
 
         span {
           color: darken($color: $gray-line, $amount: 20);
-          font-weight: 500;
           font-weight: 600;
         }
 

@@ -33,17 +33,7 @@ const Home: FC = () => {
     }
 
     useEffect(() => {
-        // if (isMounted.current) {
-        //     const queryString = qs.stringify({
-        //         sortProperty: sort.sortProperty,
-        //         categoryId,
-        //         currentPage
-        //     }, {addQueryPrefix: true})
-        //     navigate(queryString)
-        // }
-        // isMounted.current = true
         getPizzas()
-        axios.post("https://api.green-api.com/waInstance{1101821022}/SendMessage/{d533bf6949c642219f18217a873c3368ae2d1321f707470a97}")
     }, [categoryId, currentPage, sort.sortProperty, searchValue])
 
 

@@ -3,4 +3,24 @@
   justify-content: space-around;
 }
 
-//{display: 'flex', justifyContent: 'space-between'}
+.countPriceRemove {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+
+  .button {
+    display: flex;
+    align-items: center;
+    width: 100px;
+    justify-content: space-around;
+  }
+
+  .price {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    @media (max-width: 770px) {
+      justify-content: center;
+    }
+  }
+}
